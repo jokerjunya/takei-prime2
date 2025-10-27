@@ -60,7 +60,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white text-gray-900">
         <DialogHeader className="pb-4">
           <div className="flex items-center gap-4">
             <Avatar 
@@ -76,12 +76,12 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
             </Avatar>
             <div className="flex-1">
               <div className="flex items-center gap-3">
-                <DialogTitle className="text-2xl">{member.name}</DialogTitle>
+                <DialogTitle className="text-2xl text-gray-900">{member.name}</DialogTitle>
                 <div className={cn(
                   "p-1.5 rounded-lg",
-                  member.role === 'leader' && 'bg-yellow-100 dark:bg-yellow-900/30',
-                  member.role === 'newcomer' && 'bg-blue-100 dark:bg-blue-900/30',
-                  member.role === 'member' && 'bg-muted/50'
+                  member.role === 'leader' && 'bg-yellow-100 text-yellow-700',
+                  member.role === 'newcomer' && 'bg-blue-100 text-blue-700',
+                  member.role === 'member' && 'bg-gray-100 text-gray-700'
                 )}>
                   {getRoleIcon()}
                 </div>
@@ -89,7 +89,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
                   {getRoleLabel()}
                 </Badge>
               </div>
-              <DialogDescription className="mt-1">
+              <DialogDescription className="mt-1 text-gray-600">
                 性格特性とチーム内での役割
               </DialogDescription>
             </div>
@@ -100,10 +100,10 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
           {/* 性格特性が存在しない場合 */}
           {!personality && (
-            <Card className="border shadow-sm bg-card/50 backdrop-blur-sm">
+            <Card className="border shadow-sm bg-gray-50">
               <CardContent className="py-16 text-center">
-                <BarChart3 className="w-10 h-10 mx-auto text-muted-foreground/50 mb-3" />
-                <p className="text-sm font-medium text-muted-foreground">
+                <BarChart3 className="w-10 h-10 mx-auto text-gray-400 mb-3" />
+                <p className="text-sm font-medium text-gray-600">
                   性格特性データがありません
                 </p>
               </CardContent>
@@ -115,22 +115,22 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* MBTI セクション */}
               {personality?.mbti && (
-                <Card className="border shadow-sm bg-card/50 backdrop-blur-sm">
+                <Card className="border shadow-sm bg-white">
                   <CardContent className="p-6 space-y-5">
                     <div className="flex items-center gap-2">
-                      <Brain className="w-4 h-4 text-primary" />
-                      <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wide">
+                      <Brain className="w-4 h-4 text-blue-600" />
+                      <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
                         MBTI
                       </h4>
                     </div>
                     
                     {/* MBTIタイプ表示 */}
-                    <div className="flex items-center justify-between py-4 px-5 bg-muted/30 rounded-lg">
+                    <div className="flex items-center justify-between py-4 px-5 bg-gray-100 rounded-lg">
                       <div>
-                        <p className="text-3xl font-bold text-foreground tracking-tight">
+                        <p className="text-3xl font-bold text-gray-900 tracking-tight">
                           {personality.mbti.type}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-0.5">
+                        <p className="text-xs text-gray-500 mt-0.5">
                           Myers-Briggs Type
                         </p>
                       </div>
@@ -165,11 +165,11 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
               {/* Big Five セクション */}
               {personality?.bigFive && (
-                <Card className="border shadow-sm bg-card/50 backdrop-blur-sm">
+                <Card className="border shadow-sm bg-white">
                   <CardContent className="p-6 space-y-5">
                     <div className="flex items-center gap-2">
-                      <BarChart3 className="w-4 h-4 text-primary" />
-                      <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wide">
+                      <BarChart3 className="w-4 h-4 text-blue-600" />
+                      <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
                         Big Five
                       </h4>
                     </div>
@@ -235,23 +235,23 @@ const MBTIAxisBar: React.FC<MBTIAxisBarProps> = ({
       <div className="flex justify-between items-center">
         <span className={cn(
           "text-xs font-medium",
-          isLeft ? "text-foreground" : "text-muted-foreground"
+          isLeft ? "text-gray-900" : "text-gray-500"
         )}>{leftLabel}</span>
-        <span className="text-[10px] font-semibold text-muted-foreground tabular-nums">
+        <span className="text-[10px] font-semibold text-gray-600 tabular-nums">
           {score > 0 ? '+' : ''}{score}
         </span>
         <span className={cn(
           "text-xs font-medium",
-          !isLeft ? "text-foreground" : "text-muted-foreground"
+          !isLeft ? "text-gray-900" : "text-gray-500"
         )}>{rightLabel}</span>
       </div>
-      <div className="relative w-full h-2 bg-muted/50 rounded-full overflow-hidden">
+      <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
         {/* 中央線 */}
-        <div className="absolute left-1/2 top-0 w-px h-full bg-border"></div>
+        <div className="absolute left-1/2 top-0 w-px h-full bg-gray-300"></div>
         
         {/* スコアバー */}
         <div
-          className="absolute top-0 left-0 h-full bg-primary/80 transition-all duration-500 ease-out"
+          className="absolute top-0 left-0 h-full bg-blue-500 transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -273,14 +273,14 @@ const BigFiveBar: React.FC<BigFiveBarProps> = ({ label, sublabel, score }) => {
     <div className="space-y-2">
       <div className="flex justify-between items-baseline">
         <div className="flex flex-col">
-          <span className="text-xs font-semibold text-foreground">{label}</span>
-          <span className="text-[10px] text-muted-foreground">{sublabel}</span>
+          <span className="text-xs font-semibold text-gray-900">{label}</span>
+          <span className="text-[10px] text-gray-500">{sublabel}</span>
         </div>
-        <span className="text-sm font-bold text-foreground tabular-nums">{score}</span>
+        <span className="text-sm font-bold text-gray-900 tabular-nums">{score}</span>
       </div>
-      <div className="relative w-full h-2 bg-muted/50 rounded-full overflow-hidden">
+      <div className="relative w-full h-2 bg-gray-200 rounded-full overflow-hidden">
         <div
-          className="h-full bg-primary/80 transition-all duration-500 ease-out rounded-full"
+          className="h-full bg-blue-500 transition-all duration-500 ease-out rounded-full"
           style={{ width: `${score}%` }}
         />
       </div>

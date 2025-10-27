@@ -42,8 +42,9 @@ export const assignNewcomersEvenly = (
     );
     
     // 最小チームに追加（均等割り当て）
+    // 新メンバーは左端（リーダーの直後）に追加
     const targetTeam = sortedTeams[0];
-    targetTeam.members.push(newcomer);
+    targetTeam.members.unshift(newcomer);
     assignments.set(newcomer.id, targetTeam.id);
   });
 

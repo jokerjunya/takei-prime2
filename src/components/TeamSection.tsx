@@ -3,7 +3,7 @@ import type { Team, Member } from '../types';
 import { MemberCard } from './MemberCard';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { Building2, Users, ArrowRight } from 'lucide-react';
+import { Building2, Users } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 interface TeamSectionProps {
@@ -84,11 +84,6 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                     <div className="bg-primary/5 rounded-xl p-2.5 border border-primary/20">
                       <MemberCard member={team.leader} onClick={onMemberClick} />
                     </div>
-                  </div>
-
-                  {/* セパレーター */}
-                  <div className="hidden lg:flex items-center justify-center px-1">
-                    <ArrowRight className="w-4 h-4 text-muted-foreground" />
                   </div>
 
                   {/* メンバー */}
