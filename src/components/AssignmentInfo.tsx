@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { Alert } from 'flowbite-react';
-import { HiInformationCircle } from 'react-icons/hi';
+import { Card, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
+import { Info, Sparkles, GitBranch } from 'lucide-react';
 
 interface AssignmentInfoProps {
   strategy: string;
@@ -13,7 +14,7 @@ export const AssignmentInfo: React.FC<AssignmentInfoProps> = ({ strategy }) => {
   const getStrategyLabel = () => {
     switch (strategy) {
       case 'even':
-        return '均等割り当て（デモ）';
+        return '均等割り当て（デモ版）';
       case 'weighted':
         return '重み付き割り当て（開発中）';
       default:
@@ -32,6 +33,17 @@ export const AssignmentInfo: React.FC<AssignmentInfoProps> = ({ strategy }) => {
     }
   };
 
+  const getStrategyIcon = () => {
+    switch (strategy) {
+      case 'even':
+        return <GitBranch className="w-5 h-5 text-blue-500" />;
+      case 'weighted':
+        return <Sparkles className="w-5 h-5 text-purple-500" />;
+      default:
+        return <Info className="w-5 h-5 text-gray-500" />;
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -39,16 +51,32 @@ export const AssignmentInfo: React.FC<AssignmentInfoProps> = ({ strategy }) => {
       transition={{ duration: 0.5, delay: 0.6 }}
       className="w-full max-w-4xl"
     >
-      <Alert color="info" icon={HiInformationCircle} className="py-2">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-          <div className="font-semibold text-sm">
-            配置ルール: {getStrategyLabel()}
+      <Card className="border-l-4 border-l-primary bg-gradient-to-r from-primary/5 to-transparent">
+        <CardContent className="p-4">
+          <div className="flex flex-col sm:flex-row items-start gap-3">
+            {/* アイコン */}
+            <div className="flex-shrink-0 mt-1">
+              {getStrategyIcon()}
+            </div>
+
+            {/* コンテンツ */}
+            <div className="flex-1 space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <Info className="w-4 h-4 text-muted-foreground" />
+                <span className="font-semibold text-sm text-foreground">
+                  配置ルール:
+                </span>
+                <Badge variant="secondary" className="text-xs">
+                  {getStrategyLabel()}
+                </Badge>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {getStrategyDescription()}
+              </p>
+            </div>
           </div>
-          <div className="text-xs text-gray-600 dark:text-gray-400">
-            {getStrategyDescription()}
-          </div>
-        </div>
-      </Alert>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 };

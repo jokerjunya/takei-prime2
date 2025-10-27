@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import type { Team, Member } from '../types';
 import { MemberCard } from './MemberCard';
-import { Card } from 'flowbite-react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
+import { Badge } from './ui/badge';
+import { Building2, Users, ArrowRight } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface TeamSectionProps {
   teams: Team[];
@@ -18,58 +21,81 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
   highlightedMemberIds = new Set(),
   onMemberClick,
 }) => {
+  const totalMembers = teams.reduce((sum, team) => sum + team.members.length, 0);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full lg:max-w-3xl"
+      className="w-full lg:max-w-4xl"
     >
-      <Card className="shadow-md bg-white dark:bg-gray-800">
-        <div className="space-y-3">
-          {/* ヘッダー */}
-          <div className="text-center border-b border-gray-200 dark:border-gray-700 pb-2">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-              既存組織
-            </h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              {teams.length}チーム
-            </p>
+      <Card className="shadow-lg border-2 hover:shadow-xl transition-shadow duration-300">
+        <CardHeader className="pb-3 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-primary" />
+              <CardTitle className="text-xl">既存組織</CardTitle>
+            </div>
+            <div className="flex gap-2">
+              <Badge variant="outline" className="gap-1">
+                <Users className="w-3 h-3" />
+                {teams.length}チーム
+              </Badge>
+              <Badge variant="secondary" className="gap-1">
+                {totalMembers}名
+              </Badge>
+            </div>
           </div>
+          <CardDescription>
+            リーダーとメンバーで構成されたチーム
+          </CardDescription>
+        </CardHeader>
 
+        <CardContent className="pt-0">
           {/* チームリスト */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             {teams.map((team, teamIndex) => (
               <motion.div
                 key={team.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: teamIndex * 0.1 }}
-                className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800"
+                className={cn(
+                  "relative border-2 rounded-xl p-4 transition-all duration-300",
+                  "bg-gradient-to-br from-muted/30 to-muted/10",
+                  "hover:shadow-md hover:border-primary/50"
+                )}
               >
-                {/* チーム名 */}
-                <div className="mb-2">
-                  <h3 className="text-base font-bold text-gray-700 dark:text-gray-200">
+                {/* チーム名とメンバー数 */}
+                <div className="flex items-center justify-between mb-3 pb-2 border-b">
+                  <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                     {team.name}
                   </h3>
+                  <Badge variant="outline" className="text-xs">
+                    {team.members.length}名
+                  </Badge>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-start gap-3">
+                <div className="flex flex-col lg:flex-row items-start gap-4">
                   {/* リーダー */}
                   <div className="flex-shrink-0">
-                    <MemberCard member={team.leader} onClick={onMemberClick} />
+                    <div className="bg-primary/5 rounded-xl p-3 border border-primary/20">
+                      <MemberCard member={team.leader} onClick={onMemberClick} />
+                    </div>
                   </div>
 
                   {/* セパレーター */}
-                  <div className="hidden sm:flex items-center h-full py-4">
-                    <div className="w-px h-full bg-gray-300 dark:bg-gray-600"></div>
+                  <div className="hidden lg:flex items-center justify-center px-2">
+                    <ArrowRight className="w-5 h-5 text-muted-foreground" />
                   </div>
 
                   {/* メンバー */}
-                  <div className="flex-1">
+                  <div className="flex-1 w-full">
                     <motion.div
                       layout
-                      className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1"
+                      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2"
                     >
                       {team.members.map((member, index) => (
                         <motion.div
@@ -81,6 +107,12 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                             delay: highlightedMemberIds.has(member.id) ? 0.5 : 0,
                             duration: 0.4,
                           }}
+                          className={cn(
+                            "rounded-lg p-2 transition-colors",
+                            highlightedMemberIds.has(member.id) 
+                              ? "bg-orange-50 dark:bg-orange-950/20" 
+                              : "hover:bg-accent/50"
+                          )}
                         >
                           <MemberCard
                             member={member}
@@ -96,7 +128,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
               </motion.div>
             ))}
           </div>
-        </div>
+        </CardContent>
       </Card>
     </motion.div>
   );

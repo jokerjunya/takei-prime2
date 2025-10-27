@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import type { Team, Member } from './types';
 import { createNewcomers, createTeams } from './data/dummyData';
 import { assignNewcomers } from './utils/assignmentLogic';
@@ -87,20 +88,35 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-4 px-4">
-      <div className="container mx-auto max-w-7xl">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 py-8 px-4">
+      <div className="container mx-auto max-w-7xl space-y-8">
         {/* タイトル */}
-        <div className="text-center mb-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-2">
+        <div className="text-center space-y-3">
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-5xl font-black text-foreground"
+          >
             チーム配置シミュレーター
-          </h1>
-          <p className="text-sm md:text-base text-gray-500 dark:text-gray-400">
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto"
+          >
             新規加入者を既存チームに自動配置
-          </p>
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="h-1 w-32 mx-auto bg-gradient-to-r from-primary via-purple-500 to-primary rounded-full"
+          />
         </div>
 
         {/* メインコンテンツ */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-start justify-center gap-4 mb-4">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-start justify-center gap-6 mb-6">
           {/* 左: 新規加入者 */}
           <NewcomerSection
             newcomers={newcomers}
@@ -109,12 +125,14 @@ function App() {
           />
 
           {/* 中央: 自動配置ボタン */}
-          <AssignButton
-            isAssigned={isAssigned}
-            onAssign={handleAssign}
-            onReset={handleReset}
-            isAnimating={isAnimating}
-          />
+          <div className="flex items-center justify-center lg:py-12">
+            <AssignButton
+              isAssigned={isAssigned}
+              onAssign={handleAssign}
+              onReset={handleReset}
+              isAnimating={isAnimating}
+            />
+          </div>
 
           {/* 右: 既存組織 */}
           <TeamSection

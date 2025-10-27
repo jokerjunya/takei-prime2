@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import type { Member } from '../types';
-import { Badge } from 'flowbite-react';
-import { FaUserTie, FaUser, FaUserPlus } from 'react-icons/fa';
+import { Badge } from './ui/badge';
+import { Avatar, AvatarFallback } from './ui/avatar';
+import { Crown, UserPlus, User } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface MemberCardProps {
   member: Member;
@@ -23,22 +25,22 @@ export const MemberCard: React.FC<MemberCardProps> = ({
   const getRoleIcon = () => {
     switch (member.role) {
       case 'leader':
-        return <FaUserTie className="text-white" size={16} />;
+        return <Crown className="w-4 h-4" />;
       case 'newcomer':
-        return <FaUserPlus className="text-white" size={14} />;
+        return <UserPlus className="w-3.5 h-3.5" />;
       default:
-        return <FaUser className="text-white" size={12} />;
+        return <User className="w-3 h-3" />;
     }
   };
 
-  const getRoleBadgeColor = () => {
+  const getRoleBadgeVariant = () => {
     switch (member.role) {
       case 'leader':
-        return 'warning';
+        return 'default' as const;
       case 'newcomer':
-        return 'warning'; // オレンジ系で目立たせる
+        return 'secondary' as const;
       default:
-        return 'gray';
+        return 'outline' as const;
     }
   };
 
@@ -58,14 +60,14 @@ export const MemberCard: React.FC<MemberCardProps> = ({
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{
         opacity: 1,
-        scale: isHighlighted ? 1.1 : 1,
+        scale: isHighlighted ? 1.08 : 1,
       }}
       transition={{
         duration: 0.4,
         delay,
         ease: 'easeOut',
       }}
-      className="flex flex-col items-center gap-1 p-2"
+      className="flex flex-col items-center gap-2 p-2 group"
     >
       {/* アバター */}
       <motion.div
@@ -73,35 +75,44 @@ export const MemberCard: React.FC<MemberCardProps> = ({
         whileTap={{ scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300 }}
         onClick={() => onClick?.(member)}
-        className={`
-          relative w-12 h-12 rounded-full flex items-center justify-center
-          shadow-md ${member.color || 'bg-gray-400'}
-          ${isHighlighted ? 'ring-4 ring-orange-400 shadow-xl' : ''}
-          ${onClick ? 'cursor-pointer hover:shadow-lg' : ''}
-        `}
+        className="relative"
       >
-        {getRoleIcon()}
+        <Avatar
+          className={cn(
+            'h-14 w-14 border-2 transition-all duration-200',
+            isHighlighted && 'ring-4 ring-orange-400 ring-offset-2 shadow-xl',
+            onClick && 'cursor-pointer hover:shadow-lg hover:border-primary'
+          )}
+          style={{
+            backgroundColor: member.color || '#9CA3AF',
+          }}
+        >
+          <AvatarFallback className="bg-transparent text-white font-semibold">
+            {member.initials || member.name.substring(0, 2)}
+          </AvatarFallback>
+        </Avatar>
         
-        {/* 役割バッジ（アバター上部） */}
-        {member.role === 'leader' && (
-          <div className="absolute -top-1 -right-1">
-            <Badge color={getRoleBadgeColor()} size="xs">
-              {getRoleLabel()}
-            </Badge>
+        {/* 役割アイコン（アバター右下） */}
+        <div className={cn(
+          'absolute -bottom-1 -right-1 p-1.5 rounded-full border-2 border-background shadow-md transition-transform group-hover:scale-110',
+          member.role === 'leader' && 'bg-yellow-500',
+          member.role === 'newcomer' && 'bg-blue-500',
+          member.role === 'member' && 'bg-gray-500'
+        )}>
+          <div className="text-white">
+            {getRoleIcon()}
           </div>
-        )}
+        </div>
       </motion.div>
 
-      {/* 名前 */}
-      <div className="text-center">
-        <p className="text-xs font-medium text-gray-700 dark:text-gray-200">
+      {/* 名前とバッジ */}
+      <div className="text-center space-y-1">
+        <p className="text-sm font-semibold text-foreground leading-tight">
           {member.name}
         </p>
-        {member.role !== 'leader' && (
-          <Badge color={getRoleBadgeColor()} size="xs" className="mt-0.5">
-            {getRoleLabel()}
-          </Badge>
-        )}
+        <Badge variant={getRoleBadgeVariant()} className="text-[10px] px-1.5 py-0">
+          {getRoleLabel()}
+        </Badge>
       </div>
     </motion.div>
   );
