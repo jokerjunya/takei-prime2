@@ -241,35 +241,33 @@ const MBTIAxisBar: React.FC<MBTIAxisBarProps> = ({
   const absScore = Math.abs(score);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <div className="flex justify-between items-center text-xs">
         <span className={cn(
-          "font-medium transition-colors",
-          isLeft ? "text-foreground font-semibold" : "text-muted-foreground"
+          "font-medium",
+          isLeft ? "text-foreground font-bold" : "text-foreground/60"
         )}>{leftLabel}</span>
-        <Badge variant="outline" className="text-[10px] px-2 py-0.5 font-mono">
+        <Badge variant="outline" className="text-[10px] px-2 py-0.5">
           {score > 0 ? '+' : ''}{score}
         </Badge>
         <span className={cn(
-          "font-medium transition-colors",
-          !isLeft ? "text-foreground font-semibold" : "text-muted-foreground"
+          "font-medium",
+          !isLeft ? "text-foreground font-bold" : "text-foreground/60"
         )}>{rightLabel}</span>
       </div>
-      <div className="relative w-full h-7 bg-muted/50 rounded-lg overflow-hidden border-2 shadow-sm">
+      <div className="relative w-full h-8 bg-muted rounded-lg overflow-hidden border-2">
         {/* 中央線 */}
-        <div className="absolute left-1/2 top-0 w-0.5 h-full bg-border z-10"></div>
+        <div className="absolute left-1/2 top-0 w-0.5 h-full bg-foreground/20 z-10"></div>
         
         {/* スコアバー */}
         <div
-          className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary/70 to-primary transition-all duration-500 ease-out"
+          className="absolute top-0 left-0 h-full bg-primary transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10" />
-        </div>
+        />
         
         {/* スコア表示 */}
         <div className="absolute inset-0 flex items-center justify-center z-20">
-          <span className="text-[10px] font-bold text-foreground/60">
+          <span className="text-xs font-bold text-foreground drop-shadow-sm">
             {absScore}
           </span>
         </div>
@@ -289,23 +287,21 @@ interface BigFiveBarProps {
 
 const BigFiveBar: React.FC<BigFiveBarProps> = ({ label, sublabel, score }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <div className="flex justify-between items-baseline">
         <div>
-          <span className="text-sm font-semibold text-foreground">{label}</span>
-          <span className="text-[10px] text-muted-foreground ml-2">{sublabel}</span>
+          <span className="text-sm font-bold text-foreground">{label}</span>
+          <span className="text-[10px] text-foreground/60 ml-2">{sublabel}</span>
         </div>
-        <Badge variant="secondary" className="text-xs px-2 py-0.5">
+        <Badge variant="secondary" className="text-xs px-2 py-0.5 font-bold">
           {score}
         </Badge>
       </div>
-      <div className="relative w-full h-6 bg-muted/50 rounded-lg overflow-hidden border-2 shadow-sm">
+      <div className="relative w-full h-7 bg-muted rounded-lg overflow-hidden border-2">
         <div
-          className="h-full bg-gradient-to-r from-primary/70 to-primary transition-all duration-500 ease-out relative"
+          className="h-full bg-primary transition-all duration-500 ease-out"
           style={{ width: `${score}%` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10" />
-        </div>
+        />
       </div>
     </div>
   );
