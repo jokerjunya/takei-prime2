@@ -60,7 +60,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background">
         <DialogHeader className="pb-4">
           <div className="flex items-center gap-4">
             <Avatar 
