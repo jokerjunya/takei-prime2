@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import type { Member } from '../types';
 import { Badge } from './ui/badge';
-import { Avatar, AvatarFallback } from './ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Crown, UserPlus, User } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -87,6 +87,9 @@ export const MemberCard: React.FC<MemberCardProps> = ({
             backgroundColor: member.color || '#9CA3AF',
           }}
         >
+          {member.avatar && (
+            <AvatarImage src={member.avatar} alt={member.name} />
+          )}
           <AvatarFallback className="bg-transparent text-white font-semibold text-sm">
             {member.initials || member.name.substring(0, 1)}
           </AvatarFallback>

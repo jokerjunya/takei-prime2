@@ -24,7 +24,7 @@ export const NewcomerSection: React.FC<NewcomerSectionProps> = ({
       initial={{ opacity: 0, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full lg:max-w-sm"
+      className="w-full lg:w-72 lg:flex-shrink-0"
     >
       <Card className="shadow-lg border-2 hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-3 space-y-2">

@@ -28,7 +28,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full lg:max-w-5xl"
+      className="w-full flex-1 min-w-0"
     >
       <Card className="shadow-lg border-2 hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-3 space-y-2">
@@ -92,10 +92,11 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                   </div>
 
                   {/* メンバー */}
-                  <div className="flex-1 w-full">
+                  <div className="flex-1 w-full overflow-x-auto">
                     <motion.div
                       layout
-                      className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3"
+                      className="grid grid-flow-col auto-cols-min gap-3 pb-2"
+                      style={{ gridAutoColumns: 'minmax(80px, max-content)' }}
                     >
                       {team.members.map((member, index) => (
                         <motion.div

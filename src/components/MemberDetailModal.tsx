@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
-import { Avatar, AvatarFallback } from './ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
 import { Card, CardContent } from './ui/card';
 import type { Member } from '../types';
@@ -77,6 +77,9 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
                   className="w-24 h-24 border-4 shadow-lg"
                   style={{ backgroundColor: member.color || '#9CA3AF' }}
                 >
+                  {member.avatar && (
+                    <AvatarImage src={member.avatar} alt={member.name} />
+                  )}
                   <AvatarFallback className="bg-transparent text-white text-2xl font-bold">
                     {member.initials || member.name.substring(0, 2)}
                   </AvatarFallback>

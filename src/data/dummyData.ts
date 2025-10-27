@@ -88,6 +88,31 @@ const generatePersonality = (): Personality => {
 };
 
 /**
+ * アバター画像URLを生成（DiceBear API使用）
+ * 役割ごとに異なるスタイルを適用
+ */
+const generateAvatarUrl = (seed: string, role: 'leader' | 'member' | 'newcomer'): string => {
+  // 役割に応じたスタイルを選択
+  let style: string;
+  switch (role) {
+    case 'leader':
+      // リーダー：フォーマルなビジネススタイル（personas）
+      style = 'personas';
+      break;
+    case 'newcomer':
+      // 新人：若々しいスタイル（notionists）
+      style = 'notionists';
+      break;
+    case 'member':
+    default:
+      // メンバー：ビジネスカジュアル（avataaars）
+      style = 'avataaars';
+      break;
+  }
+  return `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}`;
+};
+
+/**
  * 新規加入者のダミーデータ
  */
 export const createNewcomers = (): Member[] => {
@@ -96,6 +121,7 @@ export const createNewcomers = (): Member[] => {
     id: `newcomer-${index}`,
     name,
     role: 'newcomer',
+    avatar: generateAvatarUrl(`newcomer-${name}`, 'newcomer'),
     initials: name.split(' ')[0].substring(0, 1),
     color: getNewcomerColor(index),
     personality: generatePersonality(),
@@ -118,6 +144,7 @@ const createTeamMembers = (teamIndex: number, count: number = 6): Member[] => {
       id: `team-${teamIndex}-member-${i}`,
       name,
       role: 'member' as const,
+      avatar: generateAvatarUrl(`team-${teamIndex}-${name}`, 'member'),
       initials: name.split(' ')[0].substring(0, 1),
       color: getMemberColor(teamIndex * 10 + i),
       personality: generatePersonality(),
@@ -139,6 +166,7 @@ export const createTeams = (): Team[] => {
         id: 'leader-1',
         name: leaderNames[0],
         role: 'leader',
+        avatar: generateAvatarUrl(`leader-${leaderNames[0]}`, 'leader'),
         initials: leaderNames[0].split(' ')[0].substring(0, 1),
         color: LEADER_COLOR,
         personality: generatePersonality(),
@@ -152,6 +180,7 @@ export const createTeams = (): Team[] => {
         id: 'leader-2',
         name: leaderNames[1],
         role: 'leader',
+        avatar: generateAvatarUrl(`leader-${leaderNames[1]}`, 'leader'),
         initials: leaderNames[1].split(' ')[0].substring(0, 1),
         color: LEADER_COLOR,
         personality: generatePersonality(),
@@ -165,6 +194,7 @@ export const createTeams = (): Team[] => {
         id: 'leader-3',
         name: leaderNames[2],
         role: 'leader',
+        avatar: generateAvatarUrl(`leader-${leaderNames[2]}`, 'leader'),
         initials: leaderNames[2].split(' ')[0].substring(0, 1),
         color: LEADER_COLOR,
         personality: generatePersonality(),
