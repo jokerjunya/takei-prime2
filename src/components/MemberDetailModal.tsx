@@ -100,14 +100,11 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
           {/* 性格特性が存在しない場合 */}
           {!personality && (
-            <Card className="border-2 shadow-lg bg-card">
-              <CardContent className="py-12 text-center">
-                <BarChart3 className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-                <p className="text-base font-medium text-muted-foreground">
+            <Card className="border shadow-sm bg-card/50 backdrop-blur-sm">
+              <CardContent className="py-16 text-center">
+                <BarChart3 className="w-10 h-10 mx-auto text-muted-foreground/50 mb-3" />
+                <p className="text-sm font-medium text-muted-foreground">
                   性格特性データがありません
-                </p>
-                <p className="text-sm text-muted-foreground mt-2">
-                  MBTI/Big Fiveデータが登録されていません
                 </p>
               </CardContent>
             </Card>
@@ -118,25 +115,25 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* MBTI セクション */}
               {personality?.mbti && (
-                <Card className="border-2 shadow-lg bg-card">
-                  <CardContent className="p-6 space-y-4">
-                    <div className="flex items-center gap-3 pb-3 border-b">
-                      <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
-                        <Brain className="w-5 h-5 text-primary" />
-                      </div>
-                      <h4 className="text-lg font-bold text-foreground">
-                        MBTI タイプ
+                <Card className="border shadow-sm bg-card/50 backdrop-blur-sm">
+                  <CardContent className="p-6 space-y-5">
+                    <div className="flex items-center gap-2">
+                      <Brain className="w-4 h-4 text-primary" />
+                      <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wide">
+                        MBTI
                       </h4>
                     </div>
                     
                     {/* MBTIタイプ表示 */}
-                    <div className="bg-gradient-to-br from-muted/40 to-muted/20 rounded-xl py-8 text-center border-2">
-                      <p className="text-5xl font-black text-foreground tracking-wider mb-1">
-                        {personality.mbti.type}
-                      </p>
-                      <p className="text-muted-foreground text-[10px] font-medium uppercase tracking-wide">
-                        Myers-Briggs
-                      </p>
+                    <div className="flex items-center justify-between py-4 px-5 bg-muted/30 rounded-lg">
+                      <div>
+                        <p className="text-3xl font-bold text-foreground tracking-tight">
+                          {personality.mbti.type}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
+                          Myers-Briggs Type
+                        </p>
+                      </div>
                     </div>
 
                     {/* 4軸のスコア表示 */}
@@ -168,20 +165,14 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
               {/* Big Five セクション */}
               {personality?.bigFive && (
-                <Card className="border-2 shadow-lg bg-card">
-                  <CardContent className="p-6 space-y-4">
-                    <div className="flex items-center gap-3 pb-3 border-b">
-                      <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
-                        <BarChart3 className="w-5 h-5 text-primary" />
-                      </div>
-                      <h4 className="text-lg font-bold text-foreground">
-                        Big Five 特性
+                <Card className="border shadow-sm bg-card/50 backdrop-blur-sm">
+                  <CardContent className="p-6 space-y-5">
+                    <div className="flex items-center gap-2">
+                      <BarChart3 className="w-4 h-4 text-primary" />
+                      <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wide">
+                        Big Five
                       </h4>
                     </div>
-                    
-                    <p className="text-xs text-muted-foreground pb-2">
-                      5つの主要な性格特性（0-100スケール）
-                    </p>
                     
                     <div className="space-y-4">
                       <BigFiveBar
@@ -238,39 +229,31 @@ const MBTIAxisBar: React.FC<MBTIAxisBarProps> = ({
   // スコアを0～100の範囲に変換（表示用）
   const percentage = ((score + 100) / 200) * 100;
   const isLeft = score < 0;
-  const absScore = Math.abs(score);
 
   return (
-    <div className="space-y-1.5">
-      <div className="flex justify-between items-center text-xs">
+    <div className="space-y-2">
+      <div className="flex justify-between items-center">
         <span className={cn(
-          "font-medium",
-          isLeft ? "text-foreground font-bold" : "text-foreground/60"
+          "text-xs font-medium",
+          isLeft ? "text-foreground" : "text-muted-foreground"
         )}>{leftLabel}</span>
-        <Badge variant="outline" className="text-[10px] px-2 py-0.5">
+        <span className="text-[10px] font-semibold text-muted-foreground tabular-nums">
           {score > 0 ? '+' : ''}{score}
-        </Badge>
+        </span>
         <span className={cn(
-          "font-medium",
-          !isLeft ? "text-foreground font-bold" : "text-foreground/60"
+          "text-xs font-medium",
+          !isLeft ? "text-foreground" : "text-muted-foreground"
         )}>{rightLabel}</span>
       </div>
-      <div className="relative w-full h-8 bg-muted rounded-lg overflow-hidden border-2">
+      <div className="relative w-full h-2 bg-muted/50 rounded-full overflow-hidden">
         {/* 中央線 */}
-        <div className="absolute left-1/2 top-0 w-0.5 h-full bg-foreground/20 z-10"></div>
+        <div className="absolute left-1/2 top-0 w-px h-full bg-border"></div>
         
         {/* スコアバー */}
         <div
-          className="absolute top-0 left-0 h-full bg-primary transition-all duration-500 ease-out"
+          className="absolute top-0 left-0 h-full bg-primary/80 transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         />
-        
-        {/* スコア表示 */}
-        <div className="absolute inset-0 flex items-center justify-center z-20">
-          <span className="text-xs font-bold text-foreground drop-shadow-sm">
-            {absScore}
-          </span>
-        </div>
       </div>
     </div>
   );
@@ -287,19 +270,17 @@ interface BigFiveBarProps {
 
 const BigFiveBar: React.FC<BigFiveBarProps> = ({ label, sublabel, score }) => {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       <div className="flex justify-between items-baseline">
-        <div>
-          <span className="text-sm font-bold text-foreground">{label}</span>
-          <span className="text-[10px] text-foreground/60 ml-2">{sublabel}</span>
+        <div className="flex flex-col">
+          <span className="text-xs font-semibold text-foreground">{label}</span>
+          <span className="text-[10px] text-muted-foreground">{sublabel}</span>
         </div>
-        <Badge variant="secondary" className="text-xs px-2 py-0.5 font-bold">
-          {score}
-        </Badge>
+        <span className="text-sm font-bold text-foreground tabular-nums">{score}</span>
       </div>
-      <div className="relative w-full h-7 bg-muted rounded-lg overflow-hidden border-2">
+      <div className="relative w-full h-2 bg-muted/50 rounded-full overflow-hidden">
         <div
-          className="h-full bg-primary transition-all duration-500 ease-out"
+          className="h-full bg-primary/80 transition-all duration-500 ease-out rounded-full"
           style={{ width: `${score}%` }}
         />
       </div>
