@@ -60,51 +60,43 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl">メンバー詳細情報</DialogTitle>
-          <DialogDescription className="text-xs">
-            性格特性とチーム内での役割について
-          </DialogDescription>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader className="pb-4">
+          <div className="flex items-center gap-4">
+            <Avatar 
+              className="w-16 h-16 border-2 shadow-md"
+              style={{ backgroundColor: member.color || '#9CA3AF' }}
+            >
+              {member.avatar && (
+                <AvatarImage src={member.avatar} alt={member.name} />
+              )}
+              <AvatarFallback className="bg-transparent text-white text-lg font-bold">
+                {member.initials || member.name.substring(0, 2)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <div className="flex items-center gap-3">
+                <DialogTitle className="text-2xl">{member.name}</DialogTitle>
+                <div className={cn(
+                  "p-1.5 rounded-lg",
+                  member.role === 'leader' && 'bg-yellow-100 dark:bg-yellow-900/30',
+                  member.role === 'newcomer' && 'bg-blue-100 dark:bg-blue-900/30',
+                  member.role === 'member' && 'bg-muted/50'
+                )}>
+                  {getRoleIcon()}
+                </div>
+                <Badge variant={getRoleBadgeVariant()}>
+                  {getRoleLabel()}
+                </Badge>
+              </div>
+              <DialogDescription className="mt-1">
+                性格特性とチーム内での役割
+              </DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
         
-        <div className="space-y-4 mt-4">
-          {/* 基本情報 */}
-          <Card className="border-2 shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-6">
-                <Avatar 
-                  className="w-20 h-20 border-2 shadow-md"
-                  style={{ backgroundColor: member.color || '#9CA3AF' }}
-                >
-                  {member.avatar && (
-                    <AvatarImage src={member.avatar} alt={member.name} />
-                  )}
-                  <AvatarFallback className="bg-transparent text-white text-xl font-bold">
-                    {member.initials || member.name.substring(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 space-y-2">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-2xl font-bold text-foreground">
-                      {member.name}
-                    </h3>
-                    <div className={cn(
-                      "p-1.5 rounded-lg",
-                      member.role === 'leader' && 'bg-yellow-100 dark:bg-yellow-900/30',
-                      member.role === 'newcomer' && 'bg-blue-100 dark:bg-blue-900/30',
-                      member.role === 'member' && 'bg-muted/50'
-                    )}>
-                      {getRoleIcon()}
-                    </div>
-                  </div>
-                  <Badge variant={getRoleBadgeVariant()} className="text-xs">
-                    {getRoleLabel()}
-                  </Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="space-y-6 mt-2">
 
           {/* 性格特性が存在しない場合 */}
           {!personality && (
@@ -121,100 +113,107 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
             </Card>
           )}
 
-          {/* MBTI セクション */}
-          {personality?.mbti && (
-            <Card className="border-2 shadow-lg">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
-                    <Brain className="w-5 h-5 text-primary" />
-                  </div>
-                  <h4 className="text-xl font-bold text-foreground">
-                    MBTI タイプ
-                  </h4>
-                </div>
-                
-                {/* MBTIタイプ表示 */}
-                <div className="bg-gradient-to-br from-muted/40 to-muted/20 rounded-xl p-6 text-center border-2 shadow-md">
-                  <p className="text-5xl font-black text-foreground tracking-widest mb-2">
-                    {personality.mbti.type}
-                  </p>
-                  <p className="text-muted-foreground text-xs font-medium">
-                    Myers-Briggs Type Indicator
-                  </p>
-                </div>
+          {/* 性格特性：2カラムレイアウト */}
+          {(personality?.mbti || personality?.bigFive) && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* MBTI セクション */}
+              {personality?.mbti && (
+                <Card className="border-2 shadow-lg">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-center gap-3 pb-3 border-b">
+                      <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
+                        <Brain className="w-5 h-5 text-primary" />
+                      </div>
+                      <h4 className="text-lg font-bold text-foreground">
+                        MBTI タイプ
+                      </h4>
+                    </div>
+                    
+                    {/* MBTIタイプ表示 */}
+                    <div className="bg-gradient-to-br from-muted/40 to-muted/20 rounded-xl py-8 text-center border-2">
+                      <p className="text-5xl font-black text-foreground tracking-wider mb-1">
+                        {personality.mbti.type}
+                      </p>
+                      <p className="text-muted-foreground text-[10px] font-medium uppercase tracking-wide">
+                        Myers-Briggs
+                      </p>
+                    </div>
 
-                {/* 4軸のスコア表示 */}
-                <div className="space-y-3 mt-4">
-                  <p className="text-xs font-medium text-muted-foreground">
-                    各軸のスコア分布
-                  </p>
-                  <MBTIAxisBar
-                    leftLabel="I (内向)"
-                    rightLabel="E (外向)"
-                    score={personality.mbti.scores.EI}
-                  />
-                  <MBTIAxisBar
-                    leftLabel="S (感覚)"
-                    rightLabel="N (直感)"
-                    score={personality.mbti.scores.SN}
-                  />
-                  <MBTIAxisBar
-                    leftLabel="T (思考)"
-                    rightLabel="F (感情)"
-                    score={personality.mbti.scores.TF}
-                  />
-                  <MBTIAxisBar
-                    leftLabel="J (判断)"
-                    rightLabel="P (知覚)"
-                    score={personality.mbti.scores.JP}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                    {/* 4軸のスコア表示 */}
+                    <div className="space-y-3 pt-2">
+                      <MBTIAxisBar
+                        leftLabel="内向"
+                        rightLabel="外向"
+                        score={personality.mbti.scores.EI}
+                      />
+                      <MBTIAxisBar
+                        leftLabel="感覚"
+                        rightLabel="直感"
+                        score={personality.mbti.scores.SN}
+                      />
+                      <MBTIAxisBar
+                        leftLabel="思考"
+                        rightLabel="感情"
+                        score={personality.mbti.scores.TF}
+                      />
+                      <MBTIAxisBar
+                        leftLabel="判断"
+                        rightLabel="知覚"
+                        score={personality.mbti.scores.JP}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
-          {/* Big Five セクション */}
-          {personality?.bigFive && (
-            <Card className="border-2 shadow-lg">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
-                    <BarChart3 className="w-5 h-5 text-primary" />
-                  </div>
-                  <h4 className="text-xl font-bold text-foreground">
-                    Big Five 特性
-                  </h4>
-                </div>
-                
-                <p className="text-xs text-muted-foreground">
-                  5つの主要な性格特性（0-100スケール）
-                </p>
-                
-                <div className="space-y-3 mt-4">
-                  <BigFiveBar
-                    label="開放性 (Openness)"
-                    score={personality.bigFive.openness}
-                  />
-                  <BigFiveBar
-                    label="誠実性 (Conscientiousness)"
-                    score={personality.bigFive.conscientiousness}
-                  />
-                  <BigFiveBar
-                    label="外向性 (Extraversion)"
-                    score={personality.bigFive.extraversion}
-                  />
-                  <BigFiveBar
-                    label="協調性 (Agreeableness)"
-                    score={personality.bigFive.agreeableness}
-                  />
-                  <BigFiveBar
-                    label="神経症傾向 (Neuroticism)"
-                    score={personality.bigFive.neuroticism}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+              {/* Big Five セクション */}
+              {personality?.bigFive && (
+                <Card className="border-2 shadow-lg">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-center gap-3 pb-3 border-b">
+                      <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
+                        <BarChart3 className="w-5 h-5 text-primary" />
+                      </div>
+                      <h4 className="text-lg font-bold text-foreground">
+                        Big Five 特性
+                      </h4>
+                    </div>
+                    
+                    <p className="text-xs text-muted-foreground pb-2">
+                      5つの主要な性格特性（0-100スケール）
+                    </p>
+                    
+                    <div className="space-y-4">
+                      <BigFiveBar
+                        label="開放性"
+                        sublabel="Openness"
+                        score={personality.bigFive.openness}
+                      />
+                      <BigFiveBar
+                        label="誠実性"
+                        sublabel="Conscientiousness"
+                        score={personality.bigFive.conscientiousness}
+                      />
+                      <BigFiveBar
+                        label="外向性"
+                        sublabel="Extraversion"
+                        score={personality.bigFive.extraversion}
+                      />
+                      <BigFiveBar
+                        label="協調性"
+                        sublabel="Agreeableness"
+                        score={personality.bigFive.agreeableness}
+                      />
+                      <BigFiveBar
+                        label="神経症傾向"
+                        sublabel="Neuroticism"
+                        score={personality.bigFive.neuroticism}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           )}
         </div>
       </DialogContent>
@@ -238,17 +237,25 @@ const MBTIAxisBar: React.FC<MBTIAxisBarProps> = ({
 }) => {
   // スコアを0～100の範囲に変換（表示用）
   const percentage = ((score + 100) / 200) * 100;
+  const isLeft = score < 0;
+  const absScore = Math.abs(score);
 
   return (
-    <div className="space-y-1.5">
-      <div className="flex justify-between text-xs font-medium">
-        <span className="text-foreground">{leftLabel}</span>
-        <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+    <div className="space-y-2">
+      <div className="flex justify-between items-center text-xs">
+        <span className={cn(
+          "font-medium transition-colors",
+          isLeft ? "text-foreground font-semibold" : "text-muted-foreground"
+        )}>{leftLabel}</span>
+        <Badge variant="outline" className="text-[10px] px-2 py-0.5 font-mono">
           {score > 0 ? '+' : ''}{score}
         </Badge>
-        <span className="text-foreground">{rightLabel}</span>
+        <span className={cn(
+          "font-medium transition-colors",
+          !isLeft ? "text-foreground font-semibold" : "text-muted-foreground"
+        )}>{rightLabel}</span>
       </div>
-      <div className="relative w-full h-6 bg-muted/50 rounded-lg overflow-hidden border-2 shadow-sm">
+      <div className="relative w-full h-7 bg-muted/50 rounded-lg overflow-hidden border-2 shadow-sm">
         {/* 中央線 */}
         <div className="absolute left-1/2 top-0 w-0.5 h-full bg-border z-10"></div>
         
@@ -258,6 +265,13 @@ const MBTIAxisBar: React.FC<MBTIAxisBarProps> = ({
           style={{ width: `${percentage}%` }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/10" />
+        </div>
+        
+        {/* スコア表示 */}
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <span className="text-[10px] font-bold text-foreground/60">
+            {absScore}
+          </span>
         </div>
       </div>
     </div>
@@ -269,19 +283,23 @@ const MBTIAxisBar: React.FC<MBTIAxisBarProps> = ({
  */
 interface BigFiveBarProps {
   label: string;
+  sublabel: string;
   score: number; // 0～100
 }
 
-const BigFiveBar: React.FC<BigFiveBarProps> = ({ label, score }) => {
+const BigFiveBar: React.FC<BigFiveBarProps> = ({ label, sublabel, score }) => {
   return (
-    <div className="space-y-1.5">
-      <div className="flex justify-between items-center">
-        <span className="text-xs font-medium text-foreground">{label}</span>
-        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-          {score}/100
+    <div className="space-y-2">
+      <div className="flex justify-between items-baseline">
+        <div>
+          <span className="text-sm font-semibold text-foreground">{label}</span>
+          <span className="text-[10px] text-muted-foreground ml-2">{sublabel}</span>
+        </div>
+        <Badge variant="secondary" className="text-xs px-2 py-0.5">
+          {score}
         </Badge>
       </div>
-      <div className="relative w-full h-5 bg-muted/50 rounded-lg overflow-hidden border-2 shadow-sm">
+      <div className="relative w-full h-6 bg-muted/50 rounded-lg overflow-hidden border-2 shadow-sm">
         <div
           className="h-full bg-gradient-to-r from-primary/70 to-primary transition-all duration-500 ease-out relative"
           style={{ width: `${score}%` }}
