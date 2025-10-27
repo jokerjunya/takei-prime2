@@ -60,36 +60,38 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white text-gray-900">
-        <DialogHeader className="pb-4">
-          <div className="flex items-center gap-4">
-            <Avatar 
-              className="w-16 h-16 border-2 shadow-md"
+      <DialogContent className="max-w-[95vw] sm:max-w-2xl lg:max-w-4xl max-h-[90vh] overflow-y-auto bg-white text-gray-900">
+        <DialogHeader className="pb-3 sm:pb-4">
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+            <Avatar
+              className="w-14 h-14 sm:w-16 sm:h-16 border-2 shadow-md flex-shrink-0"
               style={{ backgroundColor: member.color || '#9CA3AF' }}
             >
               {member.avatar && (
                 <AvatarImage src={member.avatar} alt={member.name} />
               )}
-              <AvatarFallback className="bg-transparent text-white text-lg font-bold">
+              <AvatarFallback className="bg-transparent text-white text-base sm:text-lg font-bold">
                 {member.initials || member.name.substring(0, 2)}
               </AvatarFallback>
             </Avatar>
-            <div className="flex-1">
-              <div className="flex items-center gap-3">
-                <DialogTitle className="text-2xl text-gray-900">{member.name}</DialogTitle>
-                <div className={cn(
-                  "p-1.5 rounded-lg",
-                  member.role === 'leader' && 'bg-yellow-100 text-yellow-700',
-                  member.role === 'newcomer' && 'bg-blue-100 text-blue-700',
-                  member.role === 'member' && 'bg-gray-100 text-gray-700'
-                )}>
-                  {getRoleIcon()}
+            <div className="flex-1 text-center sm:text-left">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+                <DialogTitle className="text-xl sm:text-2xl text-gray-900">{member.name}</DialogTitle>
+                <div className="flex items-center gap-2">
+                  <div className={cn(
+                    "p-1 sm:p-1.5 rounded-lg",
+                    member.role === 'leader' && 'bg-yellow-100 text-yellow-700',
+                    member.role === 'newcomer' && 'bg-blue-100 text-blue-700',
+                    member.role === 'member' && 'bg-gray-100 text-gray-700'
+                  )}>
+                    {getRoleIcon()}
+                  </div>
+                  <Badge variant={getRoleBadgeVariant()} className="text-xs">
+                    {getRoleLabel()}
+                  </Badge>
                 </div>
-                <Badge variant={getRoleBadgeVariant()}>
-                  {getRoleLabel()}
-                </Badge>
               </div>
-              <DialogDescription className="mt-1 text-gray-600">
+              <DialogDescription className="mt-1 text-xs sm:text-sm text-gray-600">
                 性格特性とチーム内での役割
               </DialogDescription>
             </div>
@@ -112,32 +114,32 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
           {/* 性格特性：2カラムレイアウト */}
           {(personality?.mbti || personality?.bigFive) && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* MBTI セクション */}
               {personality?.mbti && (
                 <Card className="border shadow-sm bg-white">
-                  <CardContent className="p-6 space-y-5">
+                  <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-5">
                     <div className="flex items-center gap-2">
-                      <Brain className="w-4 h-4 text-blue-600" />
-                      <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                      <Brain className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+                      <h4 className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-wide">
                         MBTI
                       </h4>
                     </div>
-                    
+
                     {/* MBTIタイプ表示 */}
-                    <div className="flex items-center justify-between py-4 px-5 bg-gray-100 rounded-lg">
+                    <div className="flex items-center justify-between py-3 px-4 sm:py-4 sm:px-5 bg-gray-100 rounded-lg">
                       <div>
-                        <p className="text-3xl font-bold text-gray-900 tracking-tight">
+                        <p className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
                           {personality.mbti.type}
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">
                           Myers-Briggs Type
                         </p>
                       </div>
                     </div>
 
                     {/* 4軸のスコア表示 */}
-                    <div className="space-y-3 pt-2">
+                    <div className="space-y-2.5 sm:space-y-3 pt-2">
                       <MBTIAxisBar
                         leftLabel="内向"
                         rightLabel="外向"
@@ -166,15 +168,15 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
               {/* Big Five セクション */}
               {personality?.bigFive && (
                 <Card className="border shadow-sm bg-white">
-                  <CardContent className="p-6 space-y-5">
+                  <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-5">
                     <div className="flex items-center gap-2">
-                      <BarChart3 className="w-4 h-4 text-blue-600" />
-                      <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                      <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+                      <h4 className="text-xs sm:text-sm font-semibold text-gray-700 uppercase tracking-wide">
                         Big Five
                       </h4>
                     </div>
-                    
-                    <div className="space-y-4">
+
+                    <div className="space-y-3 sm:space-y-4">
                       <BigFiveBar
                         label="開放性"
                         sublabel="Openness"

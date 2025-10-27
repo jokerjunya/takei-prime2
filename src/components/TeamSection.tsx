@@ -31,30 +31,30 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
       className="w-full flex-1 min-w-0"
     >
       <Card className="shadow-lg border-2 hover:shadow-xl transition-shadow duration-300">
-        <CardHeader className="pb-3 space-y-2">
-          <div className="flex items-center justify-between">
+        <CardHeader className="pb-3 space-y-2 px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-primary" />
-              <CardTitle className="text-xl">既存組織</CardTitle>
+              <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+              <CardTitle className="text-lg sm:text-xl">既存組織</CardTitle>
             </div>
             <div className="flex gap-2">
-              <Badge variant="outline" className="gap-1">
+              <Badge variant="outline" className="gap-1 text-xs">
                 <Users className="w-3 h-3" />
                 {teams.length}チーム
               </Badge>
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 text-xs">
                 {totalMembers}名
               </Badge>
             </div>
           </div>
-          <CardDescription>
+          <CardDescription className="text-xs sm:text-sm">
             リーダーとメンバーで構成されたチーム
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="pt-0">
+        <CardContent className="pt-0 px-3 sm:px-6">
           {/* チームリスト */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {teams.map((team, teamIndex) => (
               <motion.div
                 key={team.id}
@@ -62,36 +62,36 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: teamIndex * 0.1 }}
                 className={cn(
-                  "relative border-2 rounded-xl p-5 transition-all duration-300",
+                  "relative border-2 rounded-xl p-3 sm:p-4 lg:p-5 transition-all duration-300",
                   "bg-gradient-to-br from-muted/30 to-muted/10",
                   "hover:shadow-md hover:border-primary/50"
                 )}
               >
                 {/* チーム名とメンバー数 */}
-                <div className="flex items-center justify-between mb-4 pb-3 border-b">
-                  <h3 className="text-base font-bold text-foreground flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2 sm:pb-3 border-b">
+                  <h3 className="text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-primary animate-pulse" />
                     {team.name}
                   </h3>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-[10px] sm:text-xs">
                     {team.members.length}名
                   </Badge>
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-start gap-5">
+                <div className="flex flex-col lg:flex-row items-start gap-3 sm:gap-4 lg:gap-5">
                   {/* リーダー */}
                   <div className="flex-shrink-0">
-                    <div className="bg-primary/5 rounded-xl p-2.5 border border-primary/20">
+                    <div className="bg-primary/5 rounded-xl p-2 sm:p-2.5 border border-primary/20">
                       <MemberCard member={team.leader} onClick={onMemberClick} />
                     </div>
                   </div>
 
                   {/* メンバー */}
-                  <div className="flex-1 w-full overflow-x-auto">
+                  <div className="flex-1 w-full overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
                     <motion.div
                       layout
-                      className="grid grid-flow-col auto-cols-min gap-3 pb-2"
-                      style={{ gridAutoColumns: 'minmax(80px, max-content)' }}
+                      className="grid grid-flow-col auto-cols-min gap-2 sm:gap-3 pb-2 min-w-max"
+                      style={{ gridAutoColumns: 'minmax(90px, max-content)' }}
                     >
                       {team.members.map((member, index) => (
                         <motion.div

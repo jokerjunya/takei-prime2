@@ -67,7 +67,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
         delay,
         ease: 'easeOut',
       }}
-      className="flex flex-col items-center gap-1.5 p-1 group"
+      className="flex flex-col items-center gap-1.5 sm:gap-1.5 p-1 group"
     >
       {/* アバター */}
       <motion.div
@@ -79,7 +79,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
       >
         <Avatar
           className={cn(
-            'h-11 w-11 border-2 transition-all duration-200',
+            'h-14 w-14 sm:h-12 sm:w-12 lg:h-11 lg:w-11 border-2 transition-all duration-200',
             isHighlighted && 'ring-4 ring-orange-400 ring-offset-2 shadow-xl',
             onClick && 'cursor-pointer hover:shadow-lg hover:border-primary'
           )}
@@ -90,11 +90,11 @@ export const MemberCard: React.FC<MemberCardProps> = ({
           {member.avatar && (
             <AvatarImage src={member.avatar} alt={member.name} />
           )}
-          <AvatarFallback className="bg-transparent text-white font-semibold text-sm">
+          <AvatarFallback className="bg-transparent text-white font-semibold text-base sm:text-sm">
             {member.initials || member.name.substring(0, 1)}
           </AvatarFallback>
         </Avatar>
-        
+
         {/* 役割アイコン（アバター右下） */}
         <div className={cn(
           'absolute -bottom-0.5 -right-0.5 p-1 rounded-full border-2 border-background shadow-md transition-transform group-hover:scale-110',
@@ -110,10 +110,10 @@ export const MemberCard: React.FC<MemberCardProps> = ({
 
       {/* 名前とバッジ */}
       <div className="text-center space-y-0.5">
-        <p className="text-xs font-medium text-foreground leading-tight max-w-[70px] truncate">
+        <p className="text-sm sm:text-xs font-medium text-foreground leading-tight max-w-[90px] sm:max-w-[75px] truncate">
           {member.name}
         </p>
-        <Badge variant={getRoleBadgeVariant()} className="text-[9px] px-1 py-0">
+        <Badge variant={getRoleBadgeVariant()} className="text-[10px] sm:text-[9px] px-1.5 sm:px-1 py-0">
           {getRoleLabel()}
         </Badge>
       </div>
