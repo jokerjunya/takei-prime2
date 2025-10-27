@@ -100,7 +100,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
           {/* 性格特性が存在しない場合 */}
           {!personality && (
-            <Card className="border-2 shadow-lg">
+            <Card className="border-2 shadow-lg bg-card">
               <CardContent className="py-12 text-center">
                 <BarChart3 className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
                 <p className="text-base font-medium text-muted-foreground">
@@ -118,7 +118,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* MBTI セクション */}
               {personality?.mbti && (
-                <Card className="border-2 shadow-lg">
+                <Card className="border-2 shadow-lg bg-card">
                   <CardContent className="p-6 space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b">
                       <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
@@ -168,7 +168,7 @@ export const MemberDetailModal: React.FC<MemberDetailModalProps> = ({
 
               {/* Big Five セクション */}
               {personality?.bigFive && (
-                <Card className="border-2 shadow-lg">
+                <Card className="border-2 shadow-lg bg-card">
                   <CardContent className="p-6 space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b">
                       <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
