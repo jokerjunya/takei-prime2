@@ -27,19 +27,19 @@ export const NewcomerSection: React.FC<NewcomerSectionProps> = ({
       className="w-full lg:w-72 lg:flex-shrink-0"
     >
       <Card className="shadow-lg border-2 hover:shadow-xl transition-shadow duration-300">
-        <CardHeader className="pb-3 space-y-2">
-          <div className="flex items-center justify-between">
+        <CardHeader className="pb-3 space-y-2 px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-primary" />
-              <CardTitle className="text-xl">新規加入者</CardTitle>
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+              <CardTitle className="text-lg sm:text-xl">新規加入者</CardTitle>
             </div>
-            <Badge variant={isAssigned ? "default" : "secondary"} className="ml-2">
+            <Badge variant={isAssigned ? "default" : "secondary"} className="text-xs">
               {isAssigned ? '配置完了' : '配置待ち'}
             </Badge>
           </div>
-          <CardDescription>
-            {isAssigned 
-              ? '全員チームに配置されました' 
+          <CardDescription className="text-xs sm:text-sm">
+            {isAssigned
+              ? '全員チームに配置されました'
               : `${newcomers.length}名の配置を待っています`
             }
           </CardDescription>

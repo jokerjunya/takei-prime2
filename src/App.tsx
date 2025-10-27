@@ -88,22 +88,22 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 py-8 px-4">
-      <div className="container mx-auto max-w-[1600px] space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 py-4 px-3 sm:py-6 sm:px-4 lg:py-8">
+      <div className="container mx-auto max-w-[1600px] space-y-4 sm:space-y-6 lg:space-y-8">
         {/* タイトル */}
-        <div className="text-center space-y-3">
-          <motion.h1 
+        <div className="text-center space-y-2 sm:space-y-3">
+          <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-black text-foreground"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground leading-tight"
           >
             チーム配置シミュレーター
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto"
+            className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-2"
           >
             新規加入者を既存チームに自動配置
           </motion.p>
@@ -111,12 +111,12 @@ function App() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="h-1 w-32 mx-auto bg-gradient-to-r from-primary via-purple-500 to-primary rounded-full"
+            className="h-0.5 sm:h-1 w-24 sm:w-32 mx-auto bg-gradient-to-r from-primary via-purple-500 to-primary rounded-full"
           />
         </div>
 
         {/* メインコンテンツ */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-start justify-center gap-8 mb-8">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-start justify-center gap-4 sm:gap-6 lg:gap-8 mb-4 sm:mb-6 lg:mb-8">
           {/* 左: 新規加入者 */}
           <NewcomerSection
             newcomers={newcomers}
