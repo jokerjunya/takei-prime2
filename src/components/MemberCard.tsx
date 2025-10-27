@@ -25,11 +25,11 @@ export const MemberCard: React.FC<MemberCardProps> = ({
   const getRoleIcon = () => {
     switch (member.role) {
       case 'leader':
-        return <Crown className="w-4 h-4" />;
+        return <Crown className="w-3 h-3" />;
       case 'newcomer':
-        return <UserPlus className="w-3.5 h-3.5" />;
+        return <UserPlus className="w-2.5 h-2.5" />;
       default:
-        return <User className="w-3 h-3" />;
+        return <User className="w-2.5 h-2.5" />;
     }
   };
 
@@ -67,7 +67,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
         delay,
         ease: 'easeOut',
       }}
-      className="flex flex-col items-center gap-2 p-2 group"
+      className="flex flex-col items-center gap-1.5 p-1 group"
     >
       {/* アバター */}
       <motion.div
@@ -79,7 +79,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
       >
         <Avatar
           className={cn(
-            'h-14 w-14 border-2 transition-all duration-200',
+            'h-11 w-11 border-2 transition-all duration-200',
             isHighlighted && 'ring-4 ring-orange-400 ring-offset-2 shadow-xl',
             onClick && 'cursor-pointer hover:shadow-lg hover:border-primary'
           )}
@@ -87,14 +87,14 @@ export const MemberCard: React.FC<MemberCardProps> = ({
             backgroundColor: member.color || '#9CA3AF',
           }}
         >
-          <AvatarFallback className="bg-transparent text-white font-semibold">
-            {member.initials || member.name.substring(0, 2)}
+          <AvatarFallback className="bg-transparent text-white font-semibold text-sm">
+            {member.initials || member.name.substring(0, 1)}
           </AvatarFallback>
         </Avatar>
         
         {/* 役割アイコン（アバター右下） */}
         <div className={cn(
-          'absolute -bottom-1 -right-1 p-1.5 rounded-full border-2 border-background shadow-md transition-transform group-hover:scale-110',
+          'absolute -bottom-0.5 -right-0.5 p-1 rounded-full border-2 border-background shadow-md transition-transform group-hover:scale-110',
           member.role === 'leader' && 'bg-yellow-500',
           member.role === 'newcomer' && 'bg-blue-500',
           member.role === 'member' && 'bg-gray-500'
@@ -106,11 +106,11 @@ export const MemberCard: React.FC<MemberCardProps> = ({
       </motion.div>
 
       {/* 名前とバッジ */}
-      <div className="text-center space-y-1">
-        <p className="text-sm font-semibold text-foreground leading-tight">
+      <div className="text-center space-y-0.5">
+        <p className="text-xs font-medium text-foreground leading-tight max-w-[70px] truncate">
           {member.name}
         </p>
-        <Badge variant={getRoleBadgeVariant()} className="text-[10px] px-1.5 py-0">
+        <Badge variant={getRoleBadgeVariant()} className="text-[9px] px-1 py-0">
           {getRoleLabel()}
         </Badge>
       </div>

@@ -21,13 +21,6 @@ const NEWCOMER_COLORS = [
 const LEADER_COLOR = 'bg-blue-600';
 
 /**
- * メンバーのイニシャルを生成
- */
-const getInitials = (name: string): string => {
-  return name.substring(0, 1).toUpperCase();
-};
-
-/**
  * メンバー用カラーを取得
  */
 const getMemberColor = (index: number): string => {
@@ -98,11 +91,12 @@ const generatePersonality = (): Personality => {
  * 新規加入者のダミーデータ
  */
 export const createNewcomers = (): Member[] => {
-  return ['A', 'B', 'C'].map((name, index) => ({
-    id: `newcomer-${name.toLowerCase()}`,
+  const newcomerNames = ['田中 太郎', '佐藤 花子', '鈴木 一郎'];
+  return newcomerNames.map((name, index) => ({
+    id: `newcomer-${index}`,
     name,
     role: 'newcomer',
-    initials: getInitials(name),
+    initials: name.split(' ')[0].substring(0, 1),
     color: getNewcomerColor(index),
     personality: generatePersonality(),
   }));
@@ -112,29 +106,40 @@ export const createNewcomers = (): Member[] => {
  * チームメンバーを生成
  */
 const createTeamMembers = (teamIndex: number, count: number = 6): Member[] => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `team-${teamIndex}-member-${i}`,
-    name: `メンバー${i + 1}`,
-    role: 'member' as const,
-    initials: `M${i + 1}`,
-    color: getMemberColor(teamIndex * 10 + i),
-    personality: generatePersonality(),
-  }));
+  const memberNames = [
+    ['山田 次郎', '伊藤 美咲', '渡辺 健太', '高橋 由美', '中村 翔太', '小林 さくら'],
+    ['加藤 大輔', '吉田 愛', '山本 誠', '松本 香織', '井上 優', '木村 恵子'],
+    ['林 拓也', '斎藤 麻衣', '清水 雄介', '山崎 奈々', '森 大樹', '池田 結衣'],
+  ];
+  
+  return Array.from({ length: count }, (_, i) => {
+    const name = memberNames[teamIndex - 1][i];
+    return {
+      id: `team-${teamIndex}-member-${i}`,
+      name,
+      role: 'member' as const,
+      initials: name.split(' ')[0].substring(0, 1),
+      color: getMemberColor(teamIndex * 10 + i),
+      personality: generatePersonality(),
+    };
+  });
 };
 
 /**
  * 既存チームのダミーデータ
  */
 export const createTeams = (): Team[] => {
+  const leaderNames = ['山田 太郎', '佐々木 健', '田村 優子'];
+  
   return [
     {
       id: 'team-1',
       name: 'チーム1',
       leader: {
         id: 'leader-1',
-        name: 'リーダー1',
+        name: leaderNames[0],
         role: 'leader',
-        initials: 'L1',
+        initials: leaderNames[0].split(' ')[0].substring(0, 1),
         color: LEADER_COLOR,
         personality: generatePersonality(),
       },
@@ -145,9 +150,9 @@ export const createTeams = (): Team[] => {
       name: 'チーム2',
       leader: {
         id: 'leader-2',
-        name: 'リーダー2',
+        name: leaderNames[1],
         role: 'leader',
-        initials: 'L2',
+        initials: leaderNames[1].split(' ')[0].substring(0, 1),
         color: LEADER_COLOR,
         personality: generatePersonality(),
       },
@@ -158,9 +163,9 @@ export const createTeams = (): Team[] => {
       name: 'チーム3',
       leader: {
         id: 'leader-3',
-        name: 'リーダー3',
+        name: leaderNames[2],
         role: 'leader',
-        initials: 'L3',
+        initials: leaderNames[2].split(' ')[0].substring(0, 1),
         color: LEADER_COLOR,
         personality: generatePersonality(),
       },

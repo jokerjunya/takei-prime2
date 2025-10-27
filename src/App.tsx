@@ -116,7 +116,7 @@ function App() {
         </div>
 
         {/* メインコンテンツ */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-start justify-center gap-6 mb-6">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-start justify-center gap-8 mb-8">
           {/* 左: 新規加入者 */}
           <NewcomerSection
             newcomers={newcomers}

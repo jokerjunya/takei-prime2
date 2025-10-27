@@ -28,7 +28,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full lg:max-w-4xl"
+      className="w-full lg:max-w-5xl"
     >
       <Card className="shadow-lg border-2 hover:shadow-xl transition-shadow duration-300">
         <CardHeader className="pb-3 space-y-2">
@@ -62,14 +62,14 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: teamIndex * 0.1 }}
                 className={cn(
-                  "relative border-2 rounded-xl p-4 transition-all duration-300",
+                  "relative border-2 rounded-xl p-5 transition-all duration-300",
                   "bg-gradient-to-br from-muted/30 to-muted/10",
                   "hover:shadow-md hover:border-primary/50"
                 )}
               >
                 {/* チーム名とメンバー数 */}
-                <div className="flex items-center justify-between mb-3 pb-2 border-b">
-                  <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b">
+                  <h3 className="text-base font-bold text-foreground flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                     {team.name}
                   </h3>
@@ -78,24 +78,24 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                   </Badge>
                 </div>
 
-                <div className="flex flex-col lg:flex-row items-start gap-4">
+                <div className="flex flex-col lg:flex-row items-start gap-5">
                   {/* リーダー */}
                   <div className="flex-shrink-0">
-                    <div className="bg-primary/5 rounded-xl p-3 border border-primary/20">
+                    <div className="bg-primary/5 rounded-xl p-2.5 border border-primary/20">
                       <MemberCard member={team.leader} onClick={onMemberClick} />
                     </div>
                   </div>
 
                   {/* セパレーター */}
-                  <div className="hidden lg:flex items-center justify-center px-2">
-                    <ArrowRight className="w-5 h-5 text-muted-foreground" />
+                  <div className="hidden lg:flex items-center justify-center px-1">
+                    <ArrowRight className="w-4 h-4 text-muted-foreground" />
                   </div>
 
                   {/* メンバー */}
                   <div className="flex-1 w-full">
                     <motion.div
                       layout
-                      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2"
+                      className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3"
                     >
                       {team.members.map((member, index) => (
                         <motion.div
@@ -108,7 +108,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                             duration: 0.4,
                           }}
                           className={cn(
-                            "rounded-lg p-2 transition-colors",
+                            "rounded-lg p-1.5 transition-colors",
                             highlightedMemberIds.has(member.id) 
                               ? "bg-orange-50 dark:bg-orange-950/20" 
                               : "hover:bg-accent/50"

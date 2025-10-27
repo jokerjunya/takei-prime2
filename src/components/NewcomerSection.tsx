@@ -47,7 +47,7 @@ export const NewcomerSection: React.FC<NewcomerSectionProps> = ({
 
         <CardContent className="pt-0">
           {/* メンバーリスト */}
-          <div className="flex flex-col items-center gap-2 min-h-[200px] justify-center py-4">
+          <div className="flex flex-col items-center gap-3 min-h-[220px] justify-center py-6">
             <AnimatePresence mode="wait">
               {!isAssigned ? (
                 newcomers.map((newcomer, index) => (
@@ -65,7 +65,7 @@ export const NewcomerSection: React.FC<NewcomerSectionProps> = ({
                     transition={{ delay: index * 0.1 }}
                     className="w-full flex justify-center"
                   >
-                    <div className="bg-muted/30 rounded-lg p-2 hover:bg-muted/50 transition-colors">
+                    <div className="bg-muted/30 rounded-lg p-2.5 hover:bg-muted/50 transition-colors">
                       <MemberCard member={newcomer} onClick={onMemberClick} />
                     </div>
                   </motion.div>
