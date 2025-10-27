@@ -6,6 +6,7 @@ import { Card } from 'flowbite-react';
 interface NewcomerSectionProps {
   newcomers: Member[];
   isAssigned: boolean;
+  onMemberClick?: (member: Member) => void;
 }
 
 /**
@@ -14,6 +15,7 @@ interface NewcomerSectionProps {
 export const NewcomerSection: React.FC<NewcomerSectionProps> = ({
   newcomers,
   isAssigned,
+  onMemberClick,
 }) => {
   return (
     <motion.div
@@ -52,7 +54,7 @@ export const NewcomerSection: React.FC<NewcomerSectionProps> = ({
                     }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <MemberCard member={newcomer} />
+                    <MemberCard member={newcomer} onClick={onMemberClick} />
                   </motion.div>
                 ))
               ) : (

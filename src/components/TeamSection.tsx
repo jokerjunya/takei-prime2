@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
-import type { Team } from '../types';
+import type { Team, Member } from '../types';
 import { MemberCard } from './MemberCard';
 import { Card } from 'flowbite-react';
 
 interface TeamSectionProps {
   teams: Team[];
   highlightedMemberIds?: Set<string>;
+  onMemberClick?: (member: Member) => void;
 }
 
 /**
@@ -15,6 +16,7 @@ interface TeamSectionProps {
 export const TeamSection: React.FC<TeamSectionProps> = ({
   teams,
   highlightedMemberIds = new Set(),
+  onMemberClick,
 }) => {
   return (
     <motion.div
@@ -55,7 +57,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                 <div className="flex flex-col sm:flex-row items-start gap-3">
                   {/* リーダー */}
                   <div className="flex-shrink-0">
-                    <MemberCard member={team.leader} />
+                    <MemberCard member={team.leader} onClick={onMemberClick} />
                   </div>
 
                   {/* セパレーター */}
@@ -84,6 +86,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                             member={member}
                             isHighlighted={highlightedMemberIds.has(member.id)}
                             delay={index * 0.05}
+                            onClick={onMemberClick}
                           />
                         </motion.div>
                       ))}

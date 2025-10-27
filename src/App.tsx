@@ -6,6 +6,7 @@ import { NewcomerSection } from './components/NewcomerSection';
 import { TeamSection } from './components/TeamSection';
 import { AssignButton } from './components/AssignButton';
 import { AssignmentInfo } from './components/AssignmentInfo';
+import { MemberDetailModal } from './components/MemberDetailModal';
 
 /**
  * メインアプリケーションコンポーネント
@@ -23,6 +24,7 @@ function App() {
   const [highlightedMemberIds, setHighlightedMemberIds] = useState<Set<string>>(
     new Set()
   );
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null);
 
   /**
    * 自動配置処理
@@ -65,6 +67,20 @@ function App() {
     }, 500);
   };
 
+  /**
+   * メンバークリック時の処理
+   */
+  const handleMemberClick = (member: Member) => {
+    setSelectedMember(member);
+  };
+
+  /**
+   * モーダルを閉じる処理
+   */
+  const handleCloseModal = () => {
+    setSelectedMember(null);
+  };
+
   useEffect(() => {
     // 初期表示時のアニメーション用
     document.body.style.overflow = 'auto';
@@ -86,7 +102,11 @@ function App() {
         {/* メインコンテンツ */}
         <div className="flex flex-col lg:flex-row items-stretch lg:items-start justify-center gap-4 mb-4">
           {/* 左: 新規加入者 */}
-          <NewcomerSection newcomers={newcomers} isAssigned={isAssigned} />
+          <NewcomerSection
+            newcomers={newcomers}
+            isAssigned={isAssigned}
+            onMemberClick={handleMemberClick}
+          />
 
           {/* 中央: 自動配置ボタン */}
           <AssignButton
@@ -100,6 +120,7 @@ function App() {
           <TeamSection
             teams={teams}
             highlightedMemberIds={highlightedMemberIds}
+            onMemberClick={handleMemberClick}
           />
         </div>
 
@@ -107,6 +128,13 @@ function App() {
         <div className="flex justify-center">
           <AssignmentInfo strategy="even" />
         </div>
+
+        {/* メンバー詳細モーダル */}
+        <MemberDetailModal
+          member={selectedMember}
+          isOpen={selectedMember !== null}
+          onClose={handleCloseModal}
+        />
       </div>
     </div>
   );

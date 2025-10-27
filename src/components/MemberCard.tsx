@@ -7,6 +7,7 @@ interface MemberCardProps {
   member: Member;
   isHighlighted?: boolean;
   delay?: number;
+  onClick?: (member: Member) => void;
 }
 
 /**
@@ -17,6 +18,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
   member,
   isHighlighted = false,
   delay = 0,
+  onClick,
 }) => {
   const getRoleIcon = () => {
     switch (member.role) {
@@ -68,11 +70,14 @@ export const MemberCard: React.FC<MemberCardProps> = ({
       {/* アバター */}
       <motion.div
         whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300 }}
+        onClick={() => onClick?.(member)}
         className={`
           relative w-12 h-12 rounded-full flex items-center justify-center
           shadow-md ${member.color || 'bg-gray-400'}
           ${isHighlighted ? 'ring-4 ring-orange-400 shadow-xl' : ''}
+          ${onClick ? 'cursor-pointer hover:shadow-lg' : ''}
         `}
       >
         {getRoleIcon()}
