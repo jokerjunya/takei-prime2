@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import type { Team, Member } from './types';
 import { createNewcomers, createTeams } from './data/dummyData';
-import { assignNewcomers } from './utils/assignmentLogic';
+import { assignNewcomers, type CompatibilityInfo } from './utils/assignmentLogic';
 import { NewcomerSection } from './components/NewcomerSection';
 import { TeamSection } from './components/TeamSection';
 import { AssignButton } from './components/AssignButton';
 import { AssignmentInfo } from './components/AssignmentInfo';
 import { MemberDetailModal } from './components/MemberDetailModal';
+import { CompatibilityDetailModal, type PairInfo } from './components/CompatibilityDetailModal';
 
 /**
  * メインアプリケーションコンポーネント
@@ -26,6 +27,10 @@ function App() {
     new Set()
   );
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [scores, setScores] = useState<Map<string, CompatibilityInfo>>(new Map());
+  
+  // マッチ度詳細モーダルの状態（複数ペア対応）
+  const [compatibilityModalPairs, setCompatibilityModalPairs] = useState<PairInfo[]>([]);
 
   /**
    * 自動配置処理
@@ -35,21 +40,26 @@ function App() {
 
     // アニメーション開始（新規加入者がフェードアウト）
     setTimeout(() => {
-      // 配置ロジック実行
-      const result = assignNewcomers(initialTeams, initialNewcomers, 'even');
+      // 配置ロジック実行（相性ベース）
+      const result = assignNewcomers(initialTeams, initialNewcomers, 'compatibility');
       
       setTeams(result.teams);
       setIsAssigned(true);
+      
+      // スコア情報を保存
+      if (result.scores) {
+        setScores(result.scores);
+      }
 
       // 新規加入者のIDをハイライト用に保存
       const newcomerIds = new Set(initialNewcomers.map(n => n.id));
       setHighlightedMemberIds(newcomerIds);
 
-      // アニメーション完了後、ハイライトを解除
+      // アニメーション完了後、ハイライトを解除（600msに調整）
       setTimeout(() => {
         setHighlightedMemberIds(new Set());
         setIsAnimating(false);
-      }, 1500);
+      }, 1800);
     }, 500);
   };
 
@@ -64,12 +74,15 @@ function App() {
       setTeams(initialTeams);
       setIsAssigned(false);
       setHighlightedMemberIds(new Set());
+      setScores(new Map());
+      setCompatibilityModalPairs([]);
       setIsAnimating(false);
     }, 500);
   };
 
   /**
    * メンバークリック時の処理
+   * 常に本人の性格特性モーダルを表示
    */
   const handleMemberClick = (member: Member) => {
     setSelectedMember(member);
@@ -80,6 +93,42 @@ function App() {
    */
   const handleCloseModal = () => {
     setSelectedMember(null);
+  };
+
+  /**
+   * マッチ度詳細モーダルを閉じる処理
+   */
+  const handleCloseCompatibilityModal = () => {
+    setCompatibilityModalPairs([]);
+  };
+
+  /**
+   * 全ペアのマッチ度詳細を表示
+   */
+  const handleShowAllCompatibility = () => {
+    const allPairs: PairInfo[] = [];
+    
+    // 全ての新規加入者について、配置されたチームのリーダーとのペア情報を作成
+    for (const newcomer of initialNewcomers) {
+      const scoreInfo = scores.get(newcomer.id);
+      if (!scoreInfo) continue;
+      
+      // このnewcomerが配置されたチームのリーダーを探す
+      for (const team of teams) {
+        const found = team.members.find(m => m.id === newcomer.id);
+        if (found) {
+          allPairs.push({
+            leader: team.leader,
+            newcomer: found,
+            score: scoreInfo.score,
+            explanation: scoreInfo.explanation,
+          });
+          break;
+        }
+      }
+    }
+    
+    setCompatibilityModalPairs(allPairs);
   };
 
   useEffect(() => {
@@ -125,13 +174,39 @@ function App() {
           />
 
           {/* 中央: 自動配置ボタン */}
-          <div className="flex items-center justify-center lg:py-12">
+          <div className="flex flex-col items-center justify-center lg:py-12 gap-4">
             <AssignButton
               isAssigned={isAssigned}
               onAssign={handleAssign}
               onReset={handleReset}
               isAnimating={isAnimating}
             />
+            
+            {/* 組み合わせ状況を見るボタン（配置後のみ表示） */}
+            {isAssigned && scores.size > 0 && (
+              <motion.button
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                onClick={handleShowAllCompatibility}
+                className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-sm font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+              >
+                <svg 
+                  className="w-4 h-4" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" 
+                  />
+                </svg>
+                組み合わせ状況を見る
+              </motion.button>
+            )}
           </div>
 
           {/* 右: 既存組織 */}
@@ -139,12 +214,13 @@ function App() {
             teams={teams}
             highlightedMemberIds={highlightedMemberIds}
             onMemberClick={handleMemberClick}
+            scores={scores}
           />
         </div>
 
         {/* 下部: 割当ルール情報 */}
         <div className="flex justify-center">
-          <AssignmentInfo strategy="even" />
+          <AssignmentInfo strategy="compatibility" />
         </div>
 
         {/* メンバー詳細モーダル */}
@@ -152,6 +228,13 @@ function App() {
           member={selectedMember}
           isOpen={selectedMember !== null}
           onClose={handleCloseModal}
+        />
+
+        {/* マッチ度詳細モーダル */}
+        <CompatibilityDetailModal
+          isOpen={compatibilityModalPairs.length > 0}
+          onClose={handleCloseCompatibilityModal}
+          pairs={compatibilityModalPairs}
         />
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import type { Team, Member } from '../types';
+import type { CompatibilityInfo } from '../utils/assignmentLogic';
 import { MemberCard } from './MemberCard';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
@@ -10,6 +11,7 @@ interface TeamSectionProps {
   teams: Team[];
   highlightedMemberIds?: Set<string>;
   onMemberClick?: (member: Member) => void;
+  scores?: Map<string, CompatibilityInfo>;
 }
 
 /**
@@ -20,6 +22,7 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
   teams,
   highlightedMemberIds = new Set(),
   onMemberClick,
+  scores,
 }) => {
   const totalMembers = teams.reduce((sum, team) => sum + team.members.length, 0);
 
@@ -93,31 +96,36 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
                       className="grid grid-flow-col auto-cols-min gap-2 sm:gap-3 pb-2 min-w-max"
                       style={{ gridAutoColumns: 'minmax(90px, max-content)' }}
                     >
-                      {team.members.map((member, index) => (
-                        <motion.div
-                          key={member.id}
-                          layout
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{
-                            delay: highlightedMemberIds.has(member.id) ? 0.5 : 0,
-                            duration: 0.4,
-                          }}
-                          className={cn(
-                            "rounded-lg p-1.5 transition-colors",
-                            highlightedMemberIds.has(member.id) 
-                              ? "bg-orange-50 dark:bg-orange-950/20" 
-                              : "hover:bg-accent/50"
-                          )}
-                        >
-                          <MemberCard
-                            member={member}
-                            isHighlighted={highlightedMemberIds.has(member.id)}
-                            delay={index * 0.05}
-                            onClick={onMemberClick}
-                          />
-                        </motion.div>
-                      ))}
+                      {team.members.map((member, index) => {
+                        const compatibilityInfo = scores?.get(member.id);
+                        return (
+                          <motion.div
+                            key={member.id}
+                            layout
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{
+                              delay: highlightedMemberIds.has(member.id) ? 0.5 : 0,
+                              duration: 0.4,
+                            }}
+                            className={cn(
+                              "rounded-lg p-1.5 transition-colors",
+                              highlightedMemberIds.has(member.id) 
+                                ? "bg-orange-50 dark:bg-orange-950/20" 
+                                : "hover:bg-accent/50"
+                            )}
+                          >
+                            <MemberCard
+                              member={member}
+                              isHighlighted={highlightedMemberIds.has(member.id)}
+                              delay={index * 0.05}
+                              onClick={onMemberClick}
+                              compatibilityScore={compatibilityInfo?.score}
+                              compatibilityExplanation={compatibilityInfo?.explanation}
+                            />
+                          </motion.div>
+                        );
+                      })}
                     </motion.div>
                   </div>
                 </div>

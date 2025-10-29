@@ -13,6 +13,8 @@ interface AssignmentInfoProps {
 export const AssignmentInfo: React.FC<AssignmentInfoProps> = ({ strategy }) => {
   const getStrategyLabel = () => {
     switch (strategy) {
+      case 'compatibility':
+        return '相性ベース配置（A案）';
       case 'even':
         return '均等割り当て（デモ版）';
       case 'weighted':
@@ -24,6 +26,8 @@ export const AssignmentInfo: React.FC<AssignmentInfoProps> = ({ strategy }) => {
 
   const getStrategyDescription = () => {
     switch (strategy) {
+      case 'compatibility':
+        return 'Big Five類似度とMBTIボーナスに基づいて、リーダーと新規加入者の相性スコアを計算し、最適な組み合わせで配置します。各チームに1名ずつ均等に配置しながら、相性の合計を最大化します。';
       case 'even':
         return 'チームメンバー数が少ない順に新規加入者を配置します。実際のロジックは今後MBTI/Big Fiveなどの性格特性を考慮した配置に拡張予定です。';
       case 'weighted':
@@ -35,6 +39,8 @@ export const AssignmentInfo: React.FC<AssignmentInfoProps> = ({ strategy }) => {
 
   const getStrategyIcon = () => {
     switch (strategy) {
+      case 'compatibility':
+        return <Sparkles className="w-5 h-5 text-purple-500" />;
       case 'even':
         return <GitBranch className="w-5 h-5 text-blue-500" />;
       case 'weighted':
